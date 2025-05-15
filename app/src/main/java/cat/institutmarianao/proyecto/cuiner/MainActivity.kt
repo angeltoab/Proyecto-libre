@@ -14,11 +14,6 @@ import cat.institutmarianao.proyecto.NetworkService
 import cat.institutmarianao.proyecto.R
 import cat.institutmarianao.proyecto.client.ClientActivity
 import com.google.android.material.navigation.NavigationView
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.WebSocket
-import okhttp3.WebSocketListener
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,30 +30,6 @@ class MainActivity : AppCompatActivity() {
         setupToolbar()
         setupDrawer()
         setupListView()
-        val client = OkHttpClient()
-        val request = Request.Builder().url("ws://10.0.2.2:8080/ws").build()
-        val listener = object : WebSocketListener() {
-            override fun onOpen(webSocket: WebSocket, response: Response) {
-                Log.d("WebSocket", "Conectado")
-            }
-
-            override fun onMessage(webSocket: WebSocket, text: String) {
-                Log.d("WebSocket", "Mensaje: $text")
-
-                // Aquí deberías parsear el JSON recibido (que debe representar un nuevo pedido)
-                runOnUiThread {
-                    // Ejemplo: insertar un pedido falso
-                    meals.add(Order(R.drawable.ic_launcher_foreground, "Nou plat", "Taula X", 999))
-                    adapter.notifyDataSetChanged()
-                }
-            }
-
-            override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-                Log.e("WebSocket", "Error: ${t.message}")
-            }
-        }
-
-        val webSocket = client.newWebSocket(request, listener)
 
         setupAutoRefresh()
     }
