@@ -94,7 +94,7 @@ class LoginActivity : AppCompatActivity() {
                 Log.d("LoginActivity", "Response: $cleanedResponse")
 
                 try {
-                    val jsonResponse = JSONObject(cleanedResponse)  // Asegúrate de que la respuesta es un JSON
+                    val jsonResponse = JSONObject(cleanedResponse)
 
                     // Verifica el mensaje dentro del JSON
                     val status = jsonResponse.optString("status")
@@ -120,8 +120,12 @@ class LoginActivity : AppCompatActivity() {
                 }
             },
             Response.ErrorListener { error ->
-                Toast.makeText(this, "Error al iniciar sesión: ${error.message}", Toast.LENGTH_SHORT).show()
+                error.printStackTrace()
+                val statusCode = error.networkResponse?.statusCode
+                val data = error.networkResponse?.data?.toString(Charsets.UTF_8)
+                Log.e("VolleyError", "Error $statusCode: $data")
             }
+
         ) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
@@ -134,8 +138,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
+
     private fun fetchUserIdAndSave(email: String) {
-        val url = "http://10.0.2.2:8080/users/get_user_id"  // URL del WebService
+        val url = "http://10.0.2.2:8080/Usuaris/get_user_id"
         val requestQueue = Volley.newRequestQueue(this)
 
         val jsonBody = JSONObject().apply {
@@ -153,6 +158,8 @@ class LoginActivity : AppCompatActivity() {
 
                     if (status == "success") {
                         val userId = jsonResponse.getInt("id_usuari")
+                        Log.d("LoginActivity", "ID del usuario logueado: $userId")
+
                         val prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE)
                         prefs.edit()
                             .putBoolean("is_logged_in", true)
@@ -162,6 +169,7 @@ class LoginActivity : AppCompatActivity() {
                         val intent = Intent(this, ClientActivity::class.java)
                         startActivity(intent)
                         finish()
+
                     } else {
                         val message = jsonResponse.getString("message")
                         // Asegurarse de que message es un String antes de mostrarlo en el Toast

@@ -12,8 +12,11 @@ import android.widget.TextView
 import android.widget.Toast
 import cat.institutmarianao.proyecto.R
 import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import org.json.JSONObject
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -72,37 +75,40 @@ class MealAdapter(context: Context, meals: List<Meal>) :
             }
 
             buttonSend.setOnClickListener {
-                val url = "http://10.0.2.2/projecte/create_order.php"
+                val url = "http://10.0.2.2:8080/comandes"
                 val queue = Volley.newRequestQueue(context)
 
                 val prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
                 val idTaula = prefs.getInt("numero_taula", 0)
-                val idUsuari = prefs.getInt("id_usuari", 1)  // Usa 1 si no hay valor guardado
-                Log.d("MealAdapter", "id_usuari: $idUsuari")
+                val idUsuari = prefs.getInt("id_usuari", 1)
 
-                val request = object : StringRequest(
-                    Request.Method.POST, url,
-                    { response ->
-                        Toast.makeText(context, "Comanda enviada correctament", Toast.LENGTH_SHORT)
-                            .show()
+                val jsonBody = JSONObject().apply {
+                    put("id_plat", currentMeal.id_plat)
+                    put("id_taula", idTaula)
+                    put("id_usuari", idUsuari)
+                }
+
+                val request = object : JsonObjectRequest(
+                    Method.POST, url, jsonBody,
+                    Response.Listener { response ->
+                        Toast.makeText(context, "Comanda enviada correctament", Toast.LENGTH_SHORT).show()
                     },
-                    { error ->
+                    Response.ErrorListener { error ->
                         error.printStackTrace()
-                        Toast.makeText(context, "Error al crear la comanda", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(context, "Error al crear la comanda", Toast.LENGTH_SHORT).show()
                     }
                 ) {
-                    override fun getParams(): MutableMap<String, String> {
-                        val params = HashMap<String, String>()
-                        params["id_plat"] = currentMeal.id_plat.toString()
-                        params["id_taula"] = idTaula.toString()
-                        params["id_usuari"] = idUsuari.toString()
-                        return params
+                    override fun getHeaders(): MutableMap<String, String> {
+                        val headers = HashMap<String, String>()
+                        headers["Content-Type"] = "application/json; charset=utf-8"
+                        return headers
                     }
                 }
 
                 queue.add(request)
             }
+
+
         }
 
         return view
