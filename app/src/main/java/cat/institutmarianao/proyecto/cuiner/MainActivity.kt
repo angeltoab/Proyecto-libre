@@ -12,6 +12,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import cat.institutmarianao.proyecto.NetworkService
 import cat.institutmarianao.proyecto.R
+import cat.institutmarianao.proyecto.admin.AdminActivity
 import cat.institutmarianao.proyecto.client.ClientActivity
 import com.google.android.material.navigation.NavigationView
 
@@ -100,9 +101,13 @@ class MainActivity : AppCompatActivity() {
                         putExtra("from_main_activity", true)
                     })
                 }
+                R.id.nav_admin -> {
+                    startActivity(Intent(this, AdminActivity::class.java))
+                }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
+
     }
 }

@@ -17,13 +17,16 @@
         android:theme="@style/Theme.Proyecto"
         tools:targetApi="31">
         <activity
+            android:name=".admin.AdminActivity"
+            android:exported="false" />
+        <activity
             android:name=".client.LoginActivity"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".client.RegisterActivity"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".client.ClientActivity"
             android:exported="false"
