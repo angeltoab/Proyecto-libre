@@ -75,11 +75,13 @@ class OrderAdapter(context: Context, private val meals: List<Meal>) : ArrayAdapt
             val idUsuari = prefs.getInt("id_usuari", 1)
 
             val jsonBody = JSONObject().apply {
-                put("plat", JSONObject().put("id", currentMeal.id_plat))
-                put("taula", JSONObject().put("id", idTaula))
-                put("usuari", JSONObject().put("id", idUsuari))
+                put("id_plat", currentMeal.id_plat)
+                put("id_taula", idTaula)
+                put("id_usuari", idUsuari)
                 put("estat", "ACTIVA")
             }
+
+
 
             val request = object : JsonObjectRequest(
                 Request.Method.POST, url, jsonBody,

@@ -86,7 +86,9 @@ class MealAdapter(context: Context, meals: List<Meal>) :
                     put("id_plat", currentMeal.id_plat)
                     put("id_taula", idTaula)
                     put("id_usuari", idUsuari)
+                    put("estat", "ACTIVA")
                 }
+
 
                 val request = object : JsonObjectRequest(
                     Method.POST, url, jsonBody,
