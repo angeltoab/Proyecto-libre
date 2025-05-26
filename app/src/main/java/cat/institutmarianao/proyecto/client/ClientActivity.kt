@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import androidx.viewpager2.widget.ViewPager2
 import cat.institutmarianao.proyecto.NetworkService
 import cat.institutmarianao.proyecto.R
+import cat.institutmarianao.proyecto.admin.AdminActivity
 import cat.institutmarianao.proyecto.cuiner.MainActivity
 import com.google.android.material.navigation.NavigationView
 import org.json.JSONArray
@@ -147,6 +148,9 @@ class ClientActivity : AppCompatActivity() {
 
                 R.id.nav_client -> {
                     drawerLayout.closeDrawer(GravityCompat.START)
+                }
+                R.id.nav_admin -> {
+                    startActivity(Intent(this, AdminActivity::class.java))
                 }
             }
             true
